@@ -1,0 +1,90 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+package "src/Models" {
+
+    class Database {
+        - static PDO $conexion
+        - static string $host
+        - static string $dbname
+        - static string $usuario
+        - static string $password
+        - static int $port
+
+        + static getConexion() : PDO
+        + static preparar(string $sql) : PDOStatement
+        + static ejecutar(string $sql) : bool
+    }
+
+    class Usuario {
+        - int $id
+        - string $nombre
+        - string $email
+        - string $clave_hash
+        - string $rol
+        - string $creado_en
+
+        + __construct(...)
+        + guardar() : bool
+        + eliminar() : bool
+        + cargarPorId(int $id) : ?Usuario
+        + verificarClave(string $clave) : bool
+        + toArray() : array
+    }
+
+    class Entrada {
+        - int $id
+        - string $titulo
+        - string $slug
+        - string $imagen
+        - string $contenido
+        - int $autor_id
+        - string $creado_en
+
+        + __construct(...)
+        + guardar() : bool
+        + eliminar() : bool
+        + cargarPorId(int $id) : ?Entrada
+        + listar(int $limite = 20) : array
+        + toArray() : array
+    }
+
+    class Sesion {
+        + static iniciar() : void
+        + static usuarioId() : ?int
+        + static setUsuarioId(?int $id) : void
+        + static cerrar() : void
+        + static generarCSRF() : string
+        + static verificarCSRF(?string $token) : bool
+        + static validarCSRF(?string $token) : void
+    }
+}
+
+package "src/Utils" {
+    class Util {
+        + static limpiar(string $txt) : string
+        + static escapar(string $txt) : string
+        + static slugify(string $txt) : string
+        + static generarToken(int $longitud = 32) : string
+    }
+}
+
+package "src/Helpers" {
+    class Helpers {
+        .. archivo helpers.php ..
+    }
+}
+
+' Relaciones
+Usuario "1" --> "0..*" Entrada : autor de >
+Entrada "*" --> "1" Usuario : pertenece a >
+
+Sesion --> Usuario : gestiona login >
+Helpers ..> Database
+Helpers ..> Usuario
+Helpers ..> Entrada
+Helpers ..> Sesion
+Helpers ..> Util
+
+@enduml

@@ -1,0 +1,31 @@
+{
+    "name": "adria/proyecto_blog",
+    "description": "Blog con POO y MySQL",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adrian Antibon Maine"
+        }
+    ],
+    "require": {
+        "php": ">=8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Blog\\Models\\": "src/Models/",
+            "Blog\\Utils\\": "src/Utils/",
+            "Blog\\": "src/"
+        },
+        "files": [
+            "src/Helpers/helpers.php",
+            "config/bootstrap.php"
+        ]
+    },
+    "config": {
+        "platform": {
+            "php": "8.0"
+        }
+    }
+}
+
